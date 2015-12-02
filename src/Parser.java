@@ -33,9 +33,8 @@ public class Parser {
 //			add("366626.yaml");
 //			
 //		}};
-		
+		ArrayList<Match> allMatches = new ArrayList<Match>();
 		try{
-			ArrayList<Match> allMatches = new ArrayList<Match>();
 			
 			File folder = new File(folderPath);
 			FileReader fReader;
@@ -86,6 +85,14 @@ public class Parser {
 							line = reader.readLine(); // winner
 							match.winner = line.replace("winner: ", "");
 //							System.out.println(match.winner);
+						}
+						
+						while(line!=null && !line.contains("teams")){
+							line = reader.readLine();
+						}
+						if(line!=null && line.contains("teams")){
+							match.teams[0] = reader.readLine().replace("-", "").trim();
+							match.teams[1] = reader.readLine().replace("-", "").trim();
 						}
 						
 						while(line!=null && !line.contains("innings")){
@@ -253,9 +260,9 @@ public class Parser {
 				}
 				catch(Exception e){
 					countFilesWithResults--;
-					e.printStackTrace();
-					System.out.println("Parsing Error in file "+fileName);
-					System.out.println("Ignoring the file");
+//					e.printStackTrace();
+					System.out.println("Parsing Error in file "+fileName+". Ignoring");
+//					System.out.println("Ignoring the file");
 				}	
 					
 				}
@@ -267,7 +274,7 @@ public class Parser {
 			e.printStackTrace();
 			System.out.println("Error in file "+fileName);
 		}
-		return null;
+		return allMatches;
 		
 	}
 }
